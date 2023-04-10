@@ -1,0 +1,36 @@
+import random
+
+class Quiz:
+    def __init__(self, filename):
+        self.questions = []
+        self.answers = []
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+            for i in range(0, len(lines), 6):
+                question = lines[i].strip()
+                choices = [lines[j].strip() for j in range(i+1, i+5)]
+                answer = lines[i+5].strip()
+                self.questions.append(question)
+                self.answers.append(answer)
+                random.shuffle(choices)
+                self.choices = choices
+                print(question)
+                for i in range(4):
+                    print(f"{i+1}. {choices[i]}")
+                print()
+    
+    def grade(self, answers):
+        score = 0
+        for i in range(len(answers)):
+            if answers[i] == self.answers[i]:
+                score += 1
+        return score
+
+filename = input("Enter the filename: ")
+quiz = Quiz(filename)
+answers = []
+for i in range(len(quiz.questions)):
+    answer = input(f"Enter the answer for question {i+1}: ")
+    answers.append(answer)
+score = quiz.grade(answers)
+print(f"Your score is {score} out of {len(quiz.questions)}")
